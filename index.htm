@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+    height: 500px;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+    height: 500px;
+}
+
+.mapboxgl-popup {
+        width: 60px;
+        height: 70px;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+section {
+    padding:  25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+}
+</style>
+
+<div id='map'></div>
+<div id='features'>
+    <section id='baker' class='active'>
+        <h3>India</h3>
+        <p>A vast and vivid country, India is the place where I have spend the most time abroad.  In July 2015 I boarded a plane with 27 other recent college grads to begin our job training for an analytics firm based in Bangalore.  The next five months were wild and truly unpredictable, but without a doubt some of the best of my life.</p>
+    </section>
+    <section id='bangalore'>
+        <h3>Bangalore, Karnataka, India</h3>
+        <p>My home base and HQ in India, Bangalore is the IT capital of south Asia.  I once heard it said of Bangalore that if were to throw a rock, it would strike either a computer scientist or a stray dog.  No truer words have ever been spoken.  What was once a sleepy town known as the "Garden City" has transformed into a bustling metropolis that bears the stretch marks of of its rapid growth.  What it lacks in tourist sites and attractions it makes up for in brew pubs and brunch destinations, making it an excellent city for the foodie in all of us.</p>
+    </section>
+    <section id='pondicherry'>
+        <h3>Pondicherry, India</h3>
+        <p>A French possession until the 1950s, Pondicherry is a coastal town brimming with colonial charm.  Pastel-hued villas and churches line the grid-like streets of the French Quarter along with boutiques and fresh seafood restaurants.  Paradise beach is the main draw of the town and is a great place to cool off from the hot temperatures that made me apprecaite air conditioning more than I ever have in my life.</p>
+    </section>
+    <section id='mysore'>
+        <h3>Mysore, Karnataka, India</h3>
+        <p>A three-hour drive to the southwest of Bangalore brought my friends and I to the naturally beautiful city of Mysore.  Home to a sprawling palace and mountaintop temples, Mysore has just the right amount of culture for a great weekend trip.  Surrounded by waterfalls and rugged mountains, the trip back was full of panoramic vistas of the natural scenary.</p>
+    </section>
+    <section id='kerala'>
+        <h3>Kerala, India</h3>
+        <p>Situated on India's southwest coast, Kerala is a swampy paradise. Known for its calm backwaters, aquatic boulevards lined with palm trees play host to countless houseboats. Kerala is a perfet destination for group travel as you can just relax, relax, and relax on the decks of the spacious boats and watch the water go by.</p>
+    </section>
+     <section id='hampi'>
+        <h3>Hampi, Karnataka, India</h3>
+        <p>The last capital of the Vijayanagara empire, Hampi is a UNESCO world heritage site that is home to more 1600 archeological remains. A modern backpacker haven, the current town is home to a small collection of hostels, boutiques and hotels. My favorite part about Hampi is that very few sites require admission, making the rest of the vast, arid landscape free to explore at one's desire.</p>
+    </section>
+    <section id='delhi'>
+        <h3>Delhi, India</h3>
+        <p>The vibrant, and sometimes overwhelming, capital of India is a must-see on any trip to the subcontinent. I was only able to spend a day here, but Delhi offers so many sights and other attractions that it would take weeks to be tired of it. The sheer volume of Delhi (both in size and population) makes it hard to digest, but the cultural and historical significance make it one of India's top destinations.</p>
+    </section>
+    <section id='agra'>
+        <h3>Agra, Uttar Pradesh, India</h3>
+        <p>Known as "The place where the Taj Mahal is" to most foreigners, Agra is also home to a spectacular fort that offers stunning vistas of the Taj Mahal (and is also really awesome by itself). Located a 4-hour drive south of Delhi, the two cities make up two-thirds of what is referred to as The Golden Triangle, a tourist route that offers up many of India's cultural highlights.</p>
+    </section>
+    <section id='jaipur'>
+        <h3>Jaipur, Rajasthan, India</h3>
+        <p>The final leg in The Golden Triangle, Jaipur is perhaps the most impressive. Although much smaller than Delhi, Jaipur packs a big punch with impressive royal sights such as City Palace, Hawa Mahal and Amber Fort. Jaipur is also known as the Pink City, as many of its surfaces were painted an orangey pink back in the 1800s. If India royalty is what you seek, Jaipur is the place. 
+    </section>
+    <section id='pushkar'>
+        <h3>Pushkar, Rajasthan, India</h3>
+        <p>Located a few hours west of Jaipur and deeper into the regal state of Rajasthan, Pushkar is a desert town that is home to one of the world's largest livestock and camel fairs. Every fall the town is taken over by thousands of everyone's favorite one and two-humped friends, making it quite the spectacle to behold. The camels are even decorated with intricate designs shaved into their hair and adorned with colorful tassles and beads which capture the culture and history of desert life.</p>
+    </section>
+    <section id='jodhpur'>
+        <h3>Jodhpur, Rajasthan, India</h3>
+        <p>Heading even further west into Rajasthan brings you to the Blue City, Jodhpur. The imposing Mehrangar fort overlooks the city from on high and offers insane views from the top. Jodhpur's old city is composed of narrow (talking really, really narrow) streets lined with bazaars and local shops which offer shade from the desert sun. The Rao Jodha rock park, which include stretches of old city walls that are free to climb, offers a great location to catch the sunset.</p>
+    </section>
+    <section id='Jaisalmer'>
+        <h3>Jaisalmer, Rajasthan, India</h3>
+        <p>Rajasthan's Gold City, Jaisalmer is located even deeper in the Thar desert where it turns from rock to sand. Every building is made of the gold sand stone, giving the city a truly desert feel. The city boasts the most impressive fort in Rajasthan, which has hotels, shops, and restaurants inside of it. Outside the fort there are intricate Havelis, or mansions, and attractive expamples of Islamic architecture. A few miles to west of Jaisalmer lies Sam Sand Dunes, where camel safaris, sand boarding and desert camping are the name of the game.</p>
+    </section>    
+    <section id='bangkok'>
+        <h3>Bangkok, Thailand</h3>
+        <p>The land of big Buddhas and no open container laws, Bangkok is a necessary destination. The Grand Palace and Wat Pho (The Reclining Buddha) are full of more gold and precious stones than anyone could hope to count, making them impressive, breathtaking, and shiny sights to behold.  My favorite part about Thailand was the street food: kabobs? - check. Pad thai? - check. Fried scorpions? - ... check. If you want it, Thailand has it.</p>
+    </section>
+    <section id='siem'>
+        <h3>Siem Reap, Cambodia</h3>
+        <p>Deep in the jungle lies Siem Reap, Cambodia. Home to some of the most impressive and mysterious temples in the world, Siem Reap is most notably thought of as the home of Angkor Wat. Not far from Angkor Wat is the lesser-known Angkor Thom, which is a complex of mossy stone temples that have been slowly consumed by the forest over the past thousand years. Free to roam and explore, the Angkor temples are a mind-bending sight to behold.</p>
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaXJpY2hhcmRzMTUiLCJhIjoiY2l2djZxMjY1MDBkYTJvcWR2cDJubzR5YiJ9.q-9QW5QTUdzFpIZyuRov3w';
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/irichards15/cj0vbuz9100bm2smyhy2i2u1d',
+    center: [78.962880, 20.593684],
+    zoom: 4,
+    bearing: 0,
+    pitch: 40
+});
+
+var chapters = {
+    'baker': {
+        bearing: 0,
+        center: [78.962880, 20.593684],
+        zoom: 4,
+        pitch: 40
+    },
+    'bangalore': {
+        duration: 6000,
+        center: [77.594563, 12.971599],
+        bearing: 0,
+        zoom: 11.2,
+        pitch: 0
+    },
+    'pondicherry': {
+        duration: 6000,
+        center: [79.834934, 11.934549],
+        bearing: 270,
+        zoom: 13.3,
+        pitch: 0
+    },
+    'mysore': {
+        duration: 6000,
+        center: [76.639381, 12.295810],
+        bearing: 0,
+        zoom: 11.5,
+        pitch: 0
+    },
+    'kerala': {
+        bearing: 90,
+        center: [76.267304, 9.931233],
+        zoom: 11.2,
+        speed: 0.6,
+        pitch: 30
+    },
+    'hampi': {
+        bearing: 90,
+        center: [76.460024, 15.335013],
+        zoom: 13.3,
+        speed: 0.6,
+        pitch: 40
+    },
+    'delhi': {
+        bearing: 0,
+        center: [77.231054, 28.611912],
+        zoom: 11.4,
+        speed: .7
+    },
+    'agra': {
+        bearing: 0,
+        center: [78.008075, 27.176670],
+        zoom: 12,
+        pitch: 20,
+        speed: 0.5
+    },
+    'jaipur': {
+        bearing: 0,
+        center: [75.806385, 26.907078],
+        zoom: 12.1
+    },
+    'pushkar': {
+        bearing: 0,
+        center: [74.551086, 26.489749],
+        zoom: 14.3,
+        pitch: 40
+    },
+    'jodhpur': {
+        bearing: 0,
+        center: [73.018474, 26.297808],
+        zoom: 13.1,
+        pitch: 20
+    },
+    'Jaisalmer': {
+        bearing: 0,
+        center: [70.912285, 26.912389],
+        zoom: 14.3,
+        pitch: 20
+    },
+    'bangkok': {
+        bearing: 0,
+        center: [100.501765, 13.756331],
+        zoom: 12,
+        pitch: 30
+    },
+    'siem': {
+        bearing: 0,
+        center: [103.866986, 13.412469],
+        zoom: 11.3,
+        pitch: 30
+    },
+};
+
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+
+var activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+
+    map.flyTo(chapters[chapterName]);
+
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+
+    activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+map.on('load', function () {
+
+    // Add a layer showing the places.
+    map.addLayer({
+        "id": "places",
+        "type": "symbol",
+        "source": {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Make it Mount Pleasant</strong><p><a href=\"http://www.mtpleasantdc.com/makeitmtpleasant\" target=\"_blank\" title=\"Opens in a new window\">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m. <img src=\"C:/Users/Ian Richards/Downloads/mapbox_streets_icons/svgs/airport-15.svg\"></p>",
+                        "icon": "attraction",
+                        "marker-color": "#ff1cf1"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [75.824531, 26.924741]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Mad Men Season Five Finale Watch Party</strong><p>Head to Lounge 201 (201 Massachusetts Avenue NE) Sunday for a <a href=\"http://madmens5finale.eventbrite.com/\" target=\"_blank\" title=\"Opens in a new window\">Mad Men Season Five Finale Watch Party</a>, complete with 60s costume contest, Mad Men trivia, and retro food and drink. 8:00-11:00 p.m. $10 general admission, $20 admission and two hour open bar.</p>",
+                        "icon": "theatre"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.003168, 38.894651]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href=\"http://tallulaeatbar.ticketleap.com/2012beachblanket/\" target=\"_blank\" title=\"Opens in a new window\">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>",
+                        "icon": "bar"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.090372, 38.881189]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Ballston Arts & Crafts Market</strong><p>The <a href=\"http://ballstonarts-craftsmarket.blogspot.com/\" target=\"_blank\" title=\"Opens in a new window\">Ballston Arts & Crafts Market</a> sets up shop next to the Ballston metro this Saturday for the first of five dates this summer. Nearly 35 artists and crafters will be on hand selling their wares. 10:00-4:00 p.m.</p>",
+                        "icon": "art-gallery"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.111561, 38.882342]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Seersucker Bike Ride and Social</strong><p>Feeling dandy? Get fancy, grab your bike, and take part in this year's <a href=\"http://dandiesandquaintrelles.com/2012/04/the-seersucker-social-is-set-for-june-9th-save-the-date-and-start-planning-your-look/\" target=\"_blank\" title=\"Opens in a new window\">Seersucker Social</a> bike ride from Dandies and Quaintrelles. After the ride enjoy a lawn party at Hillwood with jazz, cocktails, paper hat-making, and more. 11:00-7:00 p.m.</p>",
+                        "icon": "bicycle"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.052477, 38.943951]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Capital Pride Parade</strong><p>The annual <a href=\"http://www.capitalpride.org/parade\" target=\"_blank\" title=\"Opens in a new window\">Capital Pride Parade</a> makes its way through Dupont this Saturday. 4:30 p.m. Free.</p>",
+                        "icon": "star"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.043444, 38.909664]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist <a href=\"http://www.muhsinah.com\" target=\"_blank\" title=\"Opens in a new window\">Muhsinah</a> plays the <a href=\"http://www.blackcatdc.com\">Black Cat</a> (1811 14th Street NW) tonight with <a href=\"http://www.exitclov.com\" target=\"_blank\" title=\"Opens in a new window\">Exit Clov</a> and <a href=\"http://godsilla.bandcamp.com\" target=\"_blank\" title=\"Opens in a new window\">Gods’illa</a>. 9:00 p.m. $12.</p>",
+                        "icon": "music"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.031706, 38.914581]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>A Little Night Music</strong><p>The Arlington Players' production of Stephen Sondheim's  <a href=\"http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show\" target=\"_blank\" title=\"Opens in a new window\"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>",
+                        "icon": "music"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.020945, 38.878241]
+                    }
+                },
+                 {
+                    "type": "Feature",
+                    "properties": {
+                        "description": "<strong>Truckeroo</strong><p><a href=\"http://www.truckeroodc.com/www/\" target=\"_blank\">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>",
+                        "icon": "music"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.007481, 38.876516]
+                    }
+                }]
+            }
+        },
+        "layout": {
+            "icon-image": "{icon}-15",
+            "icon-allow-overlap": true
+        }
+    });
+});
+
+
+// When a click event occurs near a place, open a popup at the location of
+// the feature, with description HTML from its properties.
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
+
+
+
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(feature.properties.description)
+        .addTo(map);
+});
+
+// Use the same approach as above to indicate that the symbols are clickable
+// by changing the cursor style to 'pointer'.
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+});
+
+  // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+map.on('click', 'places', function (e) {
+        map.flyTo({center: e.features[0].geometry.coordinates});
+    });
+
+</script>
+
+</body>
+</html>
